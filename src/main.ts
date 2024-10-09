@@ -11,7 +11,7 @@ app.append(header);
 
 // Variables
 let numFries: number = 0;
-let previousTime: DOMHighResTimeStamp = performance.now();
+let previousTime: DOMHighResTimeStamp = performance.now();		// set it to performance.now() so when autoClickerLoop() runs for the first time it already can start comparing time
 const autoClickerSecondsPerClick: number = 1;
 
 // Fry Button
@@ -35,10 +35,10 @@ function makeFries(amount: number): void {
 }
 
 function autoClickerLoop(currentTime: DOMHighResTimeStamp): void {
-	const deltaTime = currentTime - previousTime;
-	if (deltaTime >= autoClickerSecondsPerClick) {
-		makeFries(1);
-		previousTime = currentTime;
-	}
-	requestAnimationFrame(autoClickerLoop);
+  const deltaTime = (currentTime - previousTime) / 1000;
+  if (deltaTime >= autoClickerSecondsPerClick) {
+    makeFries(1);
+    previousTime = currentTime;
+  }
+  requestAnimationFrame(autoClickerLoop);
 }
