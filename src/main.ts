@@ -13,3 +13,8 @@ app.append(header);
 const button = document.createElement("button");
 button.innerHTML = "🍟 make a french fry 🍟";
 app.append(button);
+
+// Fry Counter
+const counter = document.createElement("div");
+counter.innerHTML = "you have " + 10 + " fries";
+app.append(counter);
