@@ -11,5 +11,5 @@ app.append(header);
 
 // Button
 const button = document.createElement("button");
-button.innerHTML = "Press me";
+button.innerHTML = "🍟 make a french fry 🍟";
 app.append(button);
