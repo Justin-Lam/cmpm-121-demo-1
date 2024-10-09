@@ -15,11 +15,14 @@ let numFries: number = 0;
 // Fry Button
 const button = document.createElement("button");
 button.innerHTML = "🍟 make a french fry 🍟";
-button.addEventListener("click", () => {
-	numFries++;
-	counter.innerHTML = `you have ${numFries} frenchy fries`;
-});
+button.addEventListener("click", () => makeFries(1));
 app.append(button);
+
+function makeFries(amount: number): void {
+	numFries += amount;
+	counter.innerHTML = `you have ${numFries} frenchy fries`;
+}
+
 
 // Fry Counter
 const counter = document.createElement("div");
