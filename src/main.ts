@@ -19,41 +19,42 @@ const autoClickerSecondsPerUpdate: number = 1;
 
 interface Item {
   name: string;
-	description: string,
+  description: string;
   cost: number;
   fps: number; // "fries per second", in units/sec
 }
 const availableItems: Item[] = [
   {
     name: "Hire Worker",
-		description: "They don't know that they've just agreed to work for you for the rest of their lives",
+    description:
+      "They don't know that they've just agreed to work for you for the rest of their lives",
     cost: 10,
     fps: 0.1,
   },
   {
     name: "Purchase Air Fryer",
-		description: "Turns out these things don't actually fry air",
+    description: "Turns out these things don't actually fry air",
     cost: 100,
     fps: 2,
   },
   {
     name: "Purchase Deep Fryer",
-		description: "What's a deep and why are we frying it?",
+    description: "What's a deep and why are we frying it?",
     cost: 1000,
     fps: 50,
   },
-	{
+  {
     name: "Purchase Fry Factory",
-		description: "Automated everything, from seed planting to fry polishing",
+    description: "Automated everything, from seed planting to fry polishing",
     cost: 2500,
     fps: 100,
   },
-	{
+  {
     name: "Summon Fry Demigod",
-		description: "and then make it work for minimum wage",
+    description: "and then make it work for minimum wage",
     cost: 10000,
     fps: 1000,
-  }
+  },
 ];
 const upgradeButtons: HTMLButtonElement[] = [];
 const numUpgrades: number[] = [];
@@ -75,6 +76,7 @@ for (let i = 0; i < availableItems.length; i++) {
   numUpgrades.push(0);
   const upgradeButton = document.createElement("button");
   upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[i]})`;
+	upgradeButton.title = upgrade.description;
   upgradeButton.disabled = true;
   upgradeButton.addEventListener("click", () =>
     purchaseUpgrade(upgrade, i, upgradeButton),
