@@ -2,7 +2,7 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "Finally?? My amazing game";
+const gameName = "🍟Fry Fever🍟";
 document.title = gameName;
 
 const header = document.createElement("h1");
@@ -60,7 +60,9 @@ for (let i = 0; i < upgrades.length; i++) {
   const upgradeButton = document.createElement("button");
   upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[i]})`;
   upgradeButton.disabled = true;
-  upgradeButton.addEventListener("click", () => purchaseUpgrade(upgrade, i, upgradeButton));
+  upgradeButton.addEventListener("click", () =>
+    purchaseUpgrade(upgrade, i, upgradeButton),
+  );
   app.append(upgradeButton);
   upgradeButtons.push(upgradeButton);
   numUpgrades.push(0);
@@ -98,16 +100,20 @@ function changeAFPS(amount: number): void {
   afpsCounter.innerHTML = `Fries per second: ${afps.toFixed(1)}`;
 }
 
-function purchaseUpgrade(upgrade: Upgrade, index: number, upgradeButton: HTMLButtonElement) {
-	// Subtract fries
-	changeNumFries(-upgrade.cost);
-	// Increase afps
-	changeAFPS(upgrade.fps);
-	// Increase numUpgrades and update counter in text
-	numUpgrades[index]++;
-	upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[index]})`;
-	// Increase price of upgrade
-	upgrades[index].cost *= upgradePriceIncreaseFactor;
+function purchaseUpgrade(
+  upgrade: Upgrade,
+  index: number,
+  upgradeButton: HTMLButtonElement,
+) {
+  // Subtract fries
+  changeNumFries(-upgrade.cost);
+  // Increase afps
+  changeAFPS(upgrade.fps);
+  // Increase numUpgrades and update counter in text
+  numUpgrades[index]++;
+  upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[index]})`;
+  // Increase price of upgrade
+  upgrades[index].cost *= upgradePriceIncreaseFactor;
 }
 
 function autoClickerLoop(currentTime: DOMHighResTimeStamp): void {
