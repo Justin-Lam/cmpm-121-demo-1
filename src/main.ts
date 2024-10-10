@@ -17,26 +17,26 @@ const upgradePriceIncreaseFactor = 1.15;
 let previousTime: DOMHighResTimeStamp = performance.now(); // set it to performance.now() so when autoClickerLoop() runs for the first time it already can start comparing time
 const autoClickerSecondsPerUpdate: number = 1;
 
-interface Upgrade {
+interface Item {
   name: string;
   cost: number;
   fps: number; // "fries per second", in units/sec
 }
-const upgrades: Upgrade[] = [
+const availableItems: Item[] = [
   {
     name: "Hire Worker",
     cost: 10,
-    fps: 0.1,
+    fps: 0.1
   },
   {
     name: "Purchase Air Fryer",
     cost: 100,
-    fps: 2,
+    fps: 2
   },
   {
     name: "Purchase Deep Fryer",
     cost: 1000,
-    fps: 50,
+    fps: 50
   },
 ];
 const upgradeButtons: HTMLButtonElement[] = [];
@@ -54,8 +54,8 @@ fryCounter.innerHTML = `you have ${numFries.toFixed(0)} frenchy fries`;
 app.append(fryCounter);
 
 // Upgrade Buttons
-for (let i = 0; i < upgrades.length; i++) {
-  const upgrade = upgrades[i];
+for (let i = 0; i < availableItems.length; i++) {
+  const upgrade = availableItems[i];
   numUpgrades.push(0);
   const upgradeButton = document.createElement("button");
   upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[i]})`;
@@ -82,13 +82,13 @@ function changeNumFries(amount: number): void {
   numFries += amount;
   fryCounter.innerHTML = `you have ${numFries.toFixed(0)} frenchy fries`;
   // Check to enable/disable upgrade buttons
-  for (let i = 0; i < upgrades.length; i++) {
+  for (let i = 0; i < availableItems.length; i++) {
     //Enable
-    if (numFries >= upgrades[i].cost && upgradeButtons[i].disabled) {
+    if (numFries >= availableItems[i].cost && upgradeButtons[i].disabled) {
       upgradeButtons[i].disabled = false;
     }
     //Disable
-    else if (numFries < upgrades[i].cost && !upgradeButtons[i].disabled) {
+    else if (numFries < availableItems[i].cost && !upgradeButtons[i].disabled) {
       upgradeButtons[i].disabled = true;
     }
   }
@@ -101,7 +101,7 @@ function changeAFPS(amount: number): void {
 }
 
 function purchaseUpgrade(
-  upgrade: Upgrade,
+  upgrade: Item,
   index: number,
   upgradeButton: HTMLButtonElement,
 ) {
@@ -113,7 +113,7 @@ function purchaseUpgrade(
   numUpgrades[index]++;
   upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[index]})`;
   // Increase price of upgrade
-  upgrades[index].cost *= upgradePriceIncreaseFactor;
+  availableItems[index].cost *= upgradePriceIncreaseFactor;
 }
 
 function autoClickerLoop(currentTime: DOMHighResTimeStamp): void {
