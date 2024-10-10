@@ -2,7 +2,7 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "🍟Fry Fever🍟";
+const gameName = "🍟Fry Fever Fantasy 5🍟";
 document.title = gameName;
 
 const header = document.createElement("h1");
