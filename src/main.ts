@@ -9,17 +9,18 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
+
 // Variables
 let numFries: number = 0;
+let afps = 0;		// "auto fries per second"
 
-let previousTime: DOMHighResTimeStamp = performance.now(); 	// set it to performance.now() so when autoClickerLoop() runs for the first time it already can start comparing time
+let previousTime: DOMHighResTimeStamp = performance.now();		// set it to performance.now() so when autoClickerLoop() runs for the first time it already can start comparing time
 const autoClickerSecondsPerUpdate: number = 1;
-let afps = 0;																						// "auto fries per second"
 
 interface Upgrade {
 	name: string;
 	cost: number;
-	fps: number; // "fries per second", in units/sec
+	fps: number;		// "fries per second", in units/sec
 }
 const upgrades: Upgrade[] = [
 	{
@@ -38,8 +39,9 @@ const upgrades: Upgrade[] = [
 		fps: 50,
 	},
 ];
-
 const upgradeButtons: HTMLButtonElement[] = [];
+const numUpgrades: number[] = [];
+
 
 // Fry Button
 const fryButton = document.createElement("button");
@@ -49,23 +51,29 @@ app.append(fryButton);
 
 // Fry Counter
 const fryCounter = document.createElement("div");
-fryCounter.innerHTML = `you have ${numFries} frenchy fries`;
+fryCounter.innerHTML = `you have ${numFries.toFixed(0)} frenchy fries`;
 app.append(fryCounter);
 
-// Upgrades
-upgrades.forEach((upgrade) => {
+// Upgrade Buttons
+for (let i = 0; i < upgrades.length; i++) {
+	const upgrade = upgrades[i];
+	numUpgrades.push(0);
 	const upgradeButton = document.createElement("button");
-	upgradeButton.innerHTML = upgrade.name;
+	upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[i]})`;
 	upgradeButton.disabled = true;
 	upgradeButton.addEventListener("click", () => {
 		// Subtract fries
 		changeNumFries(-upgrade.cost);
-		// Increase auto FPS
+		// Increase afps
 		changeAFPS(upgrade.fps);
+		// Increase numUpgrades and update counter in text
+		numUpgrades[i]++;
+		upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[i]})`;
 	});
 	app.append(upgradeButton);
 	upgradeButtons.push(upgradeButton);
-});
+	numUpgrades.push(0);
+}
 
 // AFPS (Auto Fries per Second) Counter
 const afpsCounter = document.createElement("div");
@@ -74,6 +82,7 @@ app.append(afpsCounter);
 
 // Auto Clicker
 requestAnimationFrame(autoClickerLoop);
+
 
 // Functions
 function changeNumFries(amount: number): void {
@@ -94,7 +103,7 @@ function changeNumFries(amount: number): void {
 }
 
 function changeAFPS(amount: number): void {
-	// Change autoFPS and update afps counter
+	// Change afps and update afps counter
 	afps += amount;
 	afpsCounter.innerHTML = `Fries per second: ${afps.toFixed(1)}`;
 }
