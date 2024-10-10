@@ -9,13 +9,39 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
+
 // Variables
 let numFries: number = 0;
-const workerCost: number = 10;
-const workerClicksPerSecond: number = 1;
+
 let previousTime: DOMHighResTimeStamp = performance.now(); // set it to performance.now() so when autoClickerLoop() runs for the first time it already can start comparing time
 const autoClickerSecondsPerClick: number = 1;
 let autoClicksPerSecond = 0;
+
+interface Upgrade {
+	name: string,
+	cost: number,
+	cps: number		// "clicks per second", in units/sec
+}
+const upgrades: Upgrade[] = [
+	{
+		name: "Hire Worker",
+		cost: 10,
+		cps: 0.1
+	},
+	{
+		name: "Purchase Air Fryer",
+		cost: 100,
+		cps: 2
+	},
+	{
+		name: "Purchase Deep Fryer",
+		cost: 1000,
+		cps: 50
+	}
+];
+
+const upgradeButtons: HTMLButtonElement[] = [];
+
 
 // Fry Button
 const fryButton = document.createElement("button");
@@ -28,39 +54,44 @@ const counter = document.createElement("div");
 counter.innerHTML = `you have ${numFries} frenchy fries`;
 app.append(counter);
 
+// Upgrades
+upgrades.forEach((upgrade) => {
+	const upgradeButton = document.createElement("button");
+	upgradeButton.innerHTML = upgrade.name;
+	upgradeButton.disabled = true;
+	upgradeButton.addEventListener("click", () => {
+		changeNumFries(-upgrade.cost);
+		autoClicksPerSecond += upgrade.cps;
+		if (numFries < upgrade.cost) {
+			upgradeButton.disabled = true;
+		}
+	});
+	app.append(upgradeButton);
+	upgradeButtons.push(upgradeButton);
+});
+
 // Auto Clicker
 requestAnimationFrame(autoClickerLoop);
 
-// Worker Button
-const workerButton = document.createElement("button");
-workerButton.innerHTML = "Hire worker";
-workerButton.disabled = true;
-workerButton.addEventListener("click", () => {
-	changeNumFries(-workerCost);
-	autoClicksPerSecond += workerClicksPerSecond;
-	if (numFries < workerCost) {
-		workerButton.disabled = true;
-	}
-});
-app.append(workerButton);
-
 // Functions
 function changeNumFries(amount: number): void {
-  // Add fries
-  numFries += amount;
-  // Update fry counter
-  counter.innerHTML = `you have ${numFries} frenchy fries`;
-  // Check to enable worker button
-  if (numFries >= workerCost && workerButton.disabled) {
-    workerButton.disabled = false;
-  }
+	// Add fries
+	numFries += amount;
+	// Update fry counter
+	counter.innerHTML = `you have ${numFries} frenchy fries`;
+	// Check to enable buttons
+	for (let i = 0; i < upgrades.length; i++) {
+		if (numFries >= upgrades[i].cost && upgradeButtons[i].disabled) {
+			upgradeButtons[i].disabled = false;
+		}
+	}
 }
 
 function autoClickerLoop(currentTime: DOMHighResTimeStamp): void {
-  const deltaTime = (currentTime - previousTime) / 1000;
-  if (deltaTime >= autoClickerSecondsPerClick) {
-    changeNumFries(autoClicksPerSecond);
-    previousTime = currentTime;
-  }
-  requestAnimationFrame(autoClickerLoop);
+	const deltaTime = (currentTime - previousTime) / 1000;
+	if (deltaTime >= autoClickerSecondsPerClick) {
+		changeNumFries(autoClicksPerSecond);
+		previousTime = currentTime;
+	}
+	requestAnimationFrame(autoClickerLoop);
 }
