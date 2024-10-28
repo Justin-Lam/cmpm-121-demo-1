@@ -1,3 +1,4 @@
+// Pre-provided Stuff
 import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
@@ -9,14 +10,16 @@ const header: HTMLHeadingElement = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-// Variables
+// Fry Variables
 let numFries: number = 0;
 let afps: number = 0; // "auto fries per second"
 const upgradePriceIncreaseFactor: number = 1.15;
 
+// Auto Click Variables
 let previousTime: DOMHighResTimeStamp = performance.now(); // set it to performance.now() so when autoClickerLoop() runs for the first time it already can start comparing time
 const autoClickerSecondsPerUpdate: number = 1;
 
+// Upgrades
 interface Item {
   name: string;
   description: string;
@@ -56,11 +59,12 @@ const availableItems: Item[] = [
     fps: 1000,
   },
 ];
+// the following arrays are parallel
 const upgradeButtons: HTMLButtonElement[] = [];
 const numUpgrades: number[] = [];
 
 // Fry Button
-createButton("🍟 make french fry 🍟", () => changeNumFries(1));
+createButton("🍟 make french fry 🍟", () => changeNumFries(1)); // don't need to save reference to button because nothing references it
 
 // Fry Counter
 const fryCounter: HTMLDivElement = createDiv(
@@ -68,16 +72,21 @@ const fryCounter: HTMLDivElement = createDiv(
 );
 
 // Upgrade Buttons
+// make a button for each upgrade
 for (let i = 0; i < availableItems.length; i++) {
+  // get the upgrade data
   const upgrade: Item = availableItems[i];
-  numUpgrades.push(0);
+  // create the upgrade button
   const upgradeButton: HTMLButtonElement = createButton(
     `${upgrade.name} (${numUpgrades[i]})`,
     () => purchaseUpgrade(upgrade, i, upgradeButton),
   );
   upgradeButton.title = upgrade.description;
   upgradeButton.disabled = true;
+  // add the button to upgradeButtons[]
   upgradeButtons.push(upgradeButton);
+  // initialize the number of player-purchased upgrades for this upgrade to 0
+  numUpgrades.push(0);
 }
 
 // AFPS (Auto Fries per Second) Counter
@@ -86,7 +95,7 @@ const afpsCounter: HTMLDivElement = createDiv(
 );
 
 // Auto Clicker
-requestAnimationFrame(autoClickerLoop); // initiate autoClickerLoop() recursively calling itself forever
+requestAnimationFrame(autoClickerLoop); // initiate autoClickerLoop() to start recursively calling itself forever
 
 // Functions
 function createButton(
@@ -112,11 +121,12 @@ function changeNumFries(amount: number): void {
   numFries += amount;
   fryCounter.innerHTML = `you have ${numFries.toFixed(0)} frenchy fries`;
   // Check to enable/disable upgrade buttons
+  // loop over each upgrade button
   for (let i = 0; i < availableItems.length; i++) {
-    //Enable
+    // enable
     if (numFries >= availableItems[i].cost && upgradeButtons[i].disabled) {
       upgradeButtons[i].disabled = false;
-    } //Disable
+    } // disable
     else if (numFries < availableItems[i].cost && !upgradeButtons[i].disabled) {
       upgradeButtons[i].disabled = true;
     }
@@ -146,10 +156,13 @@ function purchaseUpgrade(
 }
 
 function autoClickerLoop(currentTime: DOMHighResTimeStamp): void {
+  // get the delta time
   const deltaTime: number = (currentTime - previousTime) / 1000;
+  // increase num fries if it's been long enough
   if (deltaTime >= autoClickerSecondsPerUpdate) {
     changeNumFries(afps);
     previousTime = currentTime;
   }
+  // set up for this function to be called again on the next frame
   requestAnimationFrame(autoClickerLoop);
 }
