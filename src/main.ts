@@ -2,17 +2,17 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "🍟Fry Fever Fantasy 5🍟";
+const gameName: string = "🍟Fry Fever Fantasy 5🍟";
 document.title = gameName;
 
-const header = document.createElement("h1");
+const header: HTMLHeadingElement = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
 // Variables
 let numFries: number = 0;
-let afps = 0; // "auto fries per second"
-const upgradePriceIncreaseFactor = 1.15;
+let afps: number = 0; // "auto fries per second"
+const upgradePriceIncreaseFactor: number = 1.15;
 
 let previousTime: DOMHighResTimeStamp = performance.now(); // set it to performance.now() so when autoClickerLoop() runs for the first time it already can start comparing time
 const autoClickerSecondsPerUpdate: number = 1;
@@ -60,26 +60,27 @@ const upgradeButtons: HTMLButtonElement[] = [];
 const numUpgrades: number[] = [];
 
 // Fry Button
-const fryButton = document.createElement("button");
+const fryButton: HTMLButtonElement = document.createElement("button");
 fryButton.innerHTML = "🍟 make french fry 🍟";
 fryButton.addEventListener("click", () => changeNumFries(1));
 app.append(fryButton);
 
 // Fry Counter
-const fryCounter = document.createElement("div");
+const fryCounter: HTMLDivElement = document.createElement("div");
 fryCounter.innerHTML = `you have ${numFries.toFixed(0)} frenchy fries`;
 app.append(fryCounter);
 
 // Upgrade Buttons
 for (let i = 0; i < availableItems.length; i++) {
-  const upgrade = availableItems[i];
+  const upgrade: Item = availableItems[i];
   numUpgrades.push(0);
-  const upgradeButton = document.createElement("button");
+  const upgradeButton: HTMLButtonElement = document.createElement("button");
   upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[i]})`;
-	upgradeButton.title = upgrade.description;
+  upgradeButton.title = upgrade.description;
   upgradeButton.disabled = true;
-  upgradeButton.addEventListener("click", () =>
-    purchaseUpgrade(upgrade, i, upgradeButton),
+  upgradeButton.addEventListener(
+    "click",
+    () => purchaseUpgrade(upgrade, i, upgradeButton),
   );
   app.append(upgradeButton);
   upgradeButtons.push(upgradeButton);
@@ -87,7 +88,7 @@ for (let i = 0; i < availableItems.length; i++) {
 }
 
 // AFPS (Auto Fries per Second) Counter
-const afpsCounter = document.createElement("div");
+const afpsCounter: HTMLDivElement = document.createElement("div");
 afpsCounter.innerHTML = `Fries per second: ${afps.toFixed(1)}`;
 app.append(afpsCounter);
 
@@ -104,8 +105,7 @@ function changeNumFries(amount: number): void {
     //Enable
     if (numFries >= availableItems[i].cost && upgradeButtons[i].disabled) {
       upgradeButtons[i].disabled = false;
-    }
-    //Disable
+    } //Disable
     else if (numFries < availableItems[i].cost && !upgradeButtons[i].disabled) {
       upgradeButtons[i].disabled = true;
     }
@@ -122,7 +122,7 @@ function purchaseUpgrade(
   upgrade: Item,
   index: number,
   upgradeButton: HTMLButtonElement,
-) {
+): void {
   // Subtract fries
   changeNumFries(-upgrade.cost);
   // Increase afps
@@ -135,7 +135,7 @@ function purchaseUpgrade(
 }
 
 function autoClickerLoop(currentTime: DOMHighResTimeStamp): void {
-  const deltaTime = (currentTime - previousTime) / 1000;
+  const deltaTime: number = (currentTime - previousTime) / 1000;
   if (deltaTime >= autoClickerSecondsPerUpdate) {
     changeNumFries(afps);
     previousTime = currentTime;
