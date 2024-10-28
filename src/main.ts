@@ -60,42 +60,53 @@ const upgradeButtons: HTMLButtonElement[] = [];
 const numUpgrades: number[] = [];
 
 // Fry Button
-const fryButton: HTMLButtonElement = document.createElement("button");
-fryButton.innerHTML = "🍟 make french fry 🍟";
-fryButton.addEventListener("click", () => changeNumFries(1));
-app.append(fryButton);
+createButton("🍟 make french fry 🍟", () => changeNumFries(1));
 
 // Fry Counter
-const fryCounter: HTMLDivElement = document.createElement("div");
-fryCounter.innerHTML = `you have ${numFries.toFixed(0)} frenchy fries`;
-app.append(fryCounter);
+const fryCounter: HTMLDivElement = createDiv(
+  `you have ${numFries.toFixed(0)} frenchy fries`,
+);
 
 // Upgrade Buttons
 for (let i = 0; i < availableItems.length; i++) {
   const upgrade: Item = availableItems[i];
   numUpgrades.push(0);
-  const upgradeButton: HTMLButtonElement = document.createElement("button");
-  upgradeButton.innerHTML = `${upgrade.name} (${numUpgrades[i]})`;
-  upgradeButton.title = upgrade.description;
-  upgradeButton.disabled = true;
-  upgradeButton.addEventListener(
-    "click",
+  const upgradeButton: HTMLButtonElement = createButton(
+    `${upgrade.name} (${numUpgrades[i]})`,
     () => purchaseUpgrade(upgrade, i, upgradeButton),
   );
-  app.append(upgradeButton);
+  upgradeButton.title = upgrade.description;
+  upgradeButton.disabled = true;
   upgradeButtons.push(upgradeButton);
-  numUpgrades.push(0);
 }
 
 // AFPS (Auto Fries per Second) Counter
-const afpsCounter: HTMLDivElement = document.createElement("div");
-afpsCounter.innerHTML = `Fries per second: ${afps.toFixed(1)}`;
-app.append(afpsCounter);
+const afpsCounter: HTMLDivElement = createDiv(
+  `Fries per second: ${afps.toFixed(1)}`,
+);
 
 // Auto Clicker
-requestAnimationFrame(autoClickerLoop);
+requestAnimationFrame(autoClickerLoop); // initiate autoClickerLoop() recursively calling itself forever
 
 // Functions
+function createButton(
+  innerHTML: string,
+  clickEventFunction: () => void,
+): HTMLButtonElement {
+  const button: HTMLButtonElement = document.createElement("button");
+  button.innerHTML = innerHTML;
+  button.addEventListener("click", clickEventFunction);
+  app.append(button);
+  return button;
+}
+
+function createDiv(innerHTML: string): HTMLDivElement {
+  const div: HTMLDivElement = document.createElement("div");
+  div.innerHTML = innerHTML;
+  app.append(div);
+  return div;
+}
+
 function changeNumFries(amount: number): void {
   // Change fries and update fry counter
   numFries += amount;
