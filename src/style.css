@@ -29,7 +29,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #ffddc2;
+  background-color: #ffddc2;  /* Learned that this is where to put this statement from https://github.com/jhuan280/cmpm-121-demo-1/blob/main/src/style.css */
 }
 
 h1 {
@@ -54,8 +54,8 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-  display: flex;
-  place-self: center;
+  display: flex;  /* Learned that this attribute existed and could be used to put buttons on their own line from https://github.com/NickCorfmat/cmpm-121-demo-1/blob/main/src/style.css */
+  place-self: center; /* Once I learned I could use display in button like how we're using display in body, I discovered this attribute through intellisense */
 }
 button:hover {
   border-color: #646cff;
