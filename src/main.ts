@@ -74,6 +74,8 @@ const fryCounter: HTMLDivElement = createDiv(
 // Upgrade Buttons
 // make a button for each upgrade
 for (let i = 0; i < availableItems.length; i++) {
+  // initialize the number of player-purchased upgrades for this upgrade to 0
+  numUpgrades.push(0);
   // get the upgrade data
   const upgrade: Item = availableItems[i];
   // create the upgrade button
@@ -85,8 +87,6 @@ for (let i = 0; i < availableItems.length; i++) {
   upgradeButton.disabled = true;
   // add the button to upgradeButtons[]
   upgradeButtons.push(upgradeButton);
-  // initialize the number of player-purchased upgrades for this upgrade to 0
-  numUpgrades.push(0);
 }
 
 // AFPS (Auto Fries per Second) Counter
